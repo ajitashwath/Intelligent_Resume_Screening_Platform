@@ -7,7 +7,6 @@ from extractor import extract_skills_by_category
 
 st.set_page_config(
     page_title="AI Resume Screening Platform",
-    page_icon="🎯",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -84,12 +83,12 @@ def render_badges(items: list[str], pill_class: str) -> str:
     return "".join([f'<span class="skill-pill {pill_class}">{item}</span>' for item in items])
 
 with st.sidebar:
-    st.title("🎯 Resume Matcher")
+    st.title("Resume Matcher")
     st.caption("AI-powered candidate screening")
     
     st.divider()
     
-    st.markdown("### ⚙️ Scoring Weights")
+    st.markdown("### Scoring Weights")
     semantic_w = st.slider("Semantic Similarity", 0.0, 1.0, 0.6, step=0.1)
     skill_w = round(1.0 - semantic_w, 1)
     st.caption(f"Skill Overlap Weight: **{skill_w}**")
@@ -133,16 +132,16 @@ with col2:
     )
     
     if uploaded_files:
-        st.success(f"📎 **{len(uploaded_files)}** file(s) attached")
+        st.success(f"**{len(uploaded_files)}** file(s) attached")
 
 st.write("")
-analyze_btn = st.button("🚀 Analyze Candidates", type="primary", use_container_width=True)
+analyze_btn = st.button("Analyze Candidates", type="primary", use_container_width=True)
 
 if analyze_btn:
     if not job_description.strip():
-        st.warning("⚠️ Please provide a valid Job Description.")
+        st.warning("Please provide a valid Job Description.")
     elif not uploaded_files:
-        st.warning("⚠️ Please upload at least one Resume PDF.")
+        st.warning("Please upload at least one Resume PDF.")
     else:
         with st.spinner("Processing resumes and computing AI match scores..."):
             results = []
@@ -179,7 +178,7 @@ if "results" in st.session_state and st.session_state["results"]:
     st.divider()
     
     if len(results) > 1:
-        st.header("🏆 Candidate Rankings")
+        st.header("Candidate Rankings")
         
         df_summary = pd.DataFrame([
             {
@@ -197,7 +196,7 @@ if "results" in st.session_state and st.session_state["results"]:
         st.dataframe(df_summary, use_container_width=True, hide_index=True)
         st.divider()
     
-    st.header("📊 Detailed Match Analysis")
+    st.header("Detailed Match Analysis")
     
     candidate_names = [r["name"] for r in results]
     selected_name = st.selectbox("Select Candidate to Inspect:", candidate_names)
@@ -236,20 +235,20 @@ if "results" in st.session_state and st.session_state["results"]:
     st.write("")
     st.write("")
 
-    tab_skills, tab_categories, tab_text = st.tabs(["🎯 Skill Match Breakdown", "📂 Skills by Category", "📄 Extracted Resume Text"])
+    tab_skills, tab_categories, tab_text = st.tabs(["Skill Match Breakdown", "Skills by Category", "Extracted Resume Text"])
 
     with tab_skills:
         col_matched, col_missing = st.columns(2)
         
         with col_matched:
-            st.markdown(f"### ✅ Matched Skills ({len(selected_candidate['matched_skills'])})")
+            st.markdown(f"### Matched Skills ({len(selected_candidate['matched_skills'])})")
             st.markdown(
                 render_badges(selected_candidate["matched_skills"], "pill-matched"),
                 unsafe_allow_html=True
             )
             
         with col_missing:
-            st.markdown(f"### ❌ Missing Skills ({len(selected_candidate['missing_skills'])})")
+            st.markdown(f"### Missing Skills ({len(selected_candidate['missing_skills'])})")
             st.markdown(
                 render_badges(selected_candidate["missing_skills"], "pill-missing"),
                 unsafe_allow_html=True
